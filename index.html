@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ninja Crispy — Menús Equilibrats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0E0E0C;
+  --ink2:#3A3A36;
+  --ink3:#7A7A72;
+  --paper:#F5F0E8;
+  --paper2:#EDE8DE;
+  --paper3:#E2DDD3;
+  --gold:#C9A84C;
+  --gold2:#A8872E;
+  --surface:#FDFAF5;
+  --line:rgba(14,14,12,0.1);
+  --line2:rgba(14,14,12,0.06);
+  --dinar:#1A5C0A;
+  --dinar-bg:#EBF5E8;
+  --dinar-border:rgba(26,92,10,0.25);
+  --sopar:#0A4A8C;
+  --sopar-bg:#EBF2FB;
+  --sopar-border:rgba(10,74,140,0.25);
+  --r:4px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.6}
+
+/* HERO */
+.hero{background:var(--ink);padding:5rem 3rem 4rem;display:flex;flex-direction:column;align-items:flex-start;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-80px;top:-80px;width:400px;height:400px;border-radius:50%;border:1px solid rgba(201,168,76,0.15);pointer-events:none}
+.hero::before{content:'';position:absolute;right:40px;top:40px;width:220px;height:220px;border-radius:50%;border:1px solid rgba(201,168,76,0.08);pointer-events:none}
+.hero-label{font-size:11px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(3rem,7vw,5.5rem);color:#fff;line-height:1.0;margin-bottom:1.25rem;max-width:600px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:15px;color:rgba(255,255,255,0.45);max-width:420px;line-height:1.7;font-weight:300}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.08);width:100%}
+.hero-stat-n{font-family:'DM Serif Display',serif;font-size:2rem;color:#fff;line-height:1}
+.hero-stat-l{font-size:12px;color:rgba(255,255,255,0.35);margin-top:4px;letter-spacing:0.04em}
+
+/* CONTROLS */
+.controls{position:sticky;top:0;z-index:50;background:rgba(245,240,232,0.95);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:0.75rem 1.25rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:160px;max-width:260px}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--ink3);pointer-events:none}
+#search{width:100%;padding:8px 12px 8px 34px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:border-color 0.2s}
+#search::placeholder{color:var(--ink3)}
+#search:focus{border-color:var(--gold)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fbtn{padding:6px 16px;border:1px solid var(--line);border-radius:99px;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--ink3);cursor:pointer;transition:all 0.15s;letter-spacing:0.02em}
+.fbtn:hover{border-color:var(--ink2);color:var(--ink)}
+.fbtn.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.fbtn.on-dinar{background:var(--dinar);color:#fff;border-color:var(--dinar)}
+.fbtn.on-sopar{background:var(--sopar);color:#fff;border-color:var(--sopar)}
+.ctrl-right{margin-left:auto;font-size:12px;color:var(--ink3);white-space:nowrap;display:flex;align-items:center;gap:1rem}
+.sort-select{padding:6px 10px;border:1px solid var(--line);border-radius:var(--r);background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink2);cursor:pointer;outline:none}
+
+/* SECTION HEADERS */
+.section-header{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 1.25rem}
+.section-header h2{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--ink)}
+.section-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.dot-dinar{background:var(--dinar)}
+.dot-sopar{background:var(--sopar)}
+.section-line{flex:1;height:1px;background:var(--line)}
+
+/* GRID */
+main{max-width:1200px;margin:0 auto;padding:1rem 1.25rem 6rem}
+.grid{columns:3 300px;column-gap:1.25rem}
+
+/* CARD */
+.card{break-inside:avoid;background:var(--surface);border:1px solid var(--line2);border-radius:8px;margin-bottom:1.25rem;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s;overflow:hidden;position:relative}
+.card:hover{border-color:var(--line);box-shadow:0 12px 40px rgba(14,14,12,0.07)}
+.card:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.card-arc{position:absolute;top:14px;right:14px;width:44px;height:44px;opacity:0;transition:opacity 0.25s}
+.card:hover .card-arc{opacity:1}
+.arc-bg{fill:none;stroke:var(--paper2);stroke-width:2.5}
+.arc-fg{fill:none;stroke:var(--gold);stroke-width:2.5;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 0.6s ease}
+.arc-label{font-family:'DM Sans',sans-serif;font-size:8px;fill:var(--ink2);font-weight:500;text-anchor:middle;dominant-baseline:middle}
+.card-body{padding:1.4rem 1.5rem 1.3rem}
+.card-head{display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:0.85rem}
+.cat-pill{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:99px;border:1px solid;flex-shrink:0;margin-top:3px}
+.cat-dinar{color:var(--dinar);border-color:var(--dinar-border);background:var(--dinar-bg)}
+.cat-sopar{color:var(--sopar);border-color:var(--sopar-border);background:var(--sopar-bg)}
+.card h2{font-family:'DM Serif Display',serif;font-size:1.15rem;line-height:1.25;color:var(--ink);flex:1;padding-right:50px}
+.card-desc{font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:1.1rem;font-weight:300}
+.card-foot{display:flex;align-items:center;gap:1.25rem;padding-top:1rem;border-top:1px solid var(--line2)}
+.meta-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--ink3)}
+.meta-item svg{width:13px;height:13px;flex-shrink:0}
+.dif{margin-left:auto;font-size:11px;color:var(--ink3);font-weight:500;letter-spacing:0.04em}
+
+/* EMPTY */
+.empty{padding:5rem 2rem;text-align:center;color:var(--ink3)}
+.empty-icon{font-size:2.5rem;margin-bottom:1rem}
+.empty p{font-size:15px;font-weight:300}
+
+/* MODAL */
+.overlay{visibility:hidden;opacity:0;pointer-events:none;position:fixed;inset:0;background:rgba(10,10,8,0.7);z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem;transition:opacity 0.2s}
+.overlay.open{visibility:visible;opacity:1;pointer-events:auto}
+.modal{background:var(--surface);border-radius:10px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;display:flex;flex-direction:column;position:relative}
+.modal-stripe{height:4px;border-radius:10px 10px 0 0;flex-shrink:0}
+.ms-dinar{background:linear-gradient(90deg,#1A5C0A,#3A9020)}
+.ms-sopar{background:linear-gradient(90deg,#0A4A8C,#1A7AC8)}
+.modal-inner{padding:2rem 2.25rem 2.5rem}
+.modal-close{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--paper2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:16px;line-height:1;transition:background 0.15s;z-index:2}
+.modal-close:hover{background:var(--paper3)}
+.modal-cat{margin-bottom:0.65rem}
+.modal h2{font-family:'DM Serif Display',serif;font-size:1.9rem;line-height:1.15;margin-bottom:0.5rem}
+.modal-desc{font-size:14px;color:var(--ink3);line-height:1.65;font-weight:300;margin-bottom:1.25rem}
+.modal-badges{display:flex;gap:0.75rem;margin-bottom:1.75rem;flex-wrap:wrap}
+.badge{display:flex;align-items:center;gap:6px;background:var(--paper2);border-radius:var(--r);padding:7px 14px;font-size:13px;color:var(--ink2)}
+.badge svg{width:15px;height:15px;color:var(--gold)}
+.sec-label{font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);margin:1.75rem 0 0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--line2)}
+.ing-row{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;padding:7px 0;border-bottom:1px solid var(--line2);color:var(--ink);font-weight:300}
+.ing-row:last-child{border-bottom:none}
+.ing-qty{font-weight:500;color:var(--ink2);font-size:13px}
+.step{display:flex;gap:14px;margin-bottom:1.1rem;align-items:flex-start}
+.step-n{min-width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step p{font-size:14px;color:var(--ink2);line-height:1.65;font-weight:300}
+.congelat-tip{margin-top:1.5rem;padding:0.85rem 1rem;background:var(--paper2);border-radius:var(--r);border-left:3px solid var(--gold);font-size:13px;color:var(--ink2);line-height:1.55}
+.congelat-tip strong{font-weight:500;color:var(--ink)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:1.5rem 1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-brand{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--ink)}
+footer p{font-size:13px;color:var(--ink3)}
+footer a{color:var(--gold2);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+@media(max-width:700px){
+  .controls{padding:0.75rem 1.5rem}
+  .search-wrap{max-width:100%;width:100%}
+  main{padding:1rem 1.5rem 4rem}
+  .modal-inner{padding:1.5rem 1.5rem 2rem}
+  footer{padding:1.5rem}
+}
+@media(prefers-reduced-motion:reduce){.card,.card-arc,.arc-fg{transition:none}}
+
+/* HELP */
+.help-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:transparent;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;color:var(--ink3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;flex-shrink:0}
+.help-btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.help-panel{visibility:hidden;opacity:0;pointer-events:none;position:fixed;inset:0;background:rgba(10,10,8,0.7);z-index:200;display:flex;align-items:flex-end;justify-content:center;padding:0;transition:opacity 0.2s}
+.help-panel.open{visibility:visible;opacity:1;pointer-events:auto}
+.help-sheet{background:var(--surface);border-radius:16px 16px 0 0;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;padding:1.5rem 1.5rem 2.5rem}
+.help-handle{width:36px;height:4px;background:var(--paper3);border-radius:99px;margin:0 auto 1.5rem}
+.help-sheet h3{font-family:'DM Serif Display',serif;font-size:1.4rem;margin-bottom:1.25rem;color:var(--ink)}
+.help-section{margin-bottom:1.5rem}
+.help-section:last-child{margin-bottom:0}
+.help-mode{display:flex;gap:12px;align-items:flex-start;padding:0.85rem 1rem;background:var(--paper2);border-radius:8px;margin-bottom:8px}
+.help-mode-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hm-airfry{background:#FBF0EB}
+.hm-roast{background:#EBF5E8}
+.hm-recrisp{background:#EBF2FB}
+.hm-keepwarm{background:#FDF4E1}
+.help-mode-icon svg{width:18px;height:18px}
+.hm-airfry svg{color:#8B2500}
+.hm-roast svg{color:#1A5C0A}
+.hm-recrisp svg{color:#0A4A8C}
+.hm-keepwarm svg{color:#8A5A00}
+.help-mode-body{}
+.help-mode-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.help-mode-desc{font-size:13px;color:var(--ink3);line-height:1.55;font-weight:300}
+.help-tip{font-size:13px;color:var(--ink2);line-height:1.6;font-weight:300;padding:0.75rem 1rem;border-left:3px solid var(--gold);background:var(--paper2);border-radius:0 6px 6px 0;margin-bottom:8px}
+.help-tip strong{font-weight:500}
+.help-sub{font-size:10px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink3);margin:1.25rem 0 0.6rem;padding-bottom:0.4rem;border-bottom:1px solid var(--line2)}
+</style>
+</head>
+<body>
+
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Cerca plats…" aria-label="Cerca plats">
+  </div>
+  <div class="filters" role="group" aria-label="Filtra per moment">
+    <button class="fbtn on" data-f="tots">Tots</button>
+    <button class="fbtn" data-f="dinar">Dinar</button>
+    <button class="fbtn" data-f="sopar">Sopar</button>
+  </div>
+  <div class="ctrl-right">
+    <select class="sort-select" id="sort" aria-label="Ordena per">
+      <option value="nom">A–Z</option>
+      <option value="temps">Temps</option>
+      <option value="dif">Dificultat</option>
+    </select>
+    <span id="count" aria-live="polite"></span>
+    <button class="help-btn" id="help-btn" aria-label="Ajuda">?</button>
+  </div>
+</div>
+
+<main id="main">
+  <div id="grid" role="list"></div>
+</main>
+
+<footer>
+  <div class="footer-brand">Ninja Crispy</div>
+  <p>33 plats equilibrats · <a href="https://github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
+</footer>
+
+<!-- HELP PANEL -->
+<div class="help-panel" id="help-panel" role="dialog" aria-modal="true" aria-label="Ajuda">
+  <div class="help-sheet" id="help-sheet">
+    <div class="help-handle"></div>
+    <h3>Com funciona el Ninja Crispy</h3>
+
+    <p class="help-sub">Els 4 modes</p>
+
+    <div class="help-mode">
+      <div class="help-mode-icon hm-airfry">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
+      <div class="help-mode-body">
+        <div class="help-mode-name">Air Fry — Fregit amb aire</div>
+        <div class="help-mode-desc">El mode principal. Circula aire calent a alta velocitat per daurar i cruixir els aliments amb molt poc oli. Ideal per a tot el que ha de quedar cruixent per fora: patates, aletes, peix empanada, croquetes, farcellets, hamburgueses.</div>
+      </div>
+    </div>
+
+    <div class="help-mode">
+      <div class="help-mode-icon hm-roast">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="help-mode-body">
+        <div class="help-mode-name">Roast — Rostit</div>
+        <div class="help-mode-desc">Cocció lenta i suau, com un forn convencional però molt més ràpid. Ideal per a peces grosses que necessiten cuinar-se bé per dins sense cremar per fora: llom de porc, pollastre sencer, verdures rostides, bacallà, arròs.</div>
+      </div>
+    </div>
+
+    <div class="help-mode">
+      <div class="help-mode-icon hm-recrisp">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      </div>
+      <div class="help-mode-body">
+        <div class="help-mode-name">Recrisp — Recupera el cruixent</div>
+        <div class="help-mode-desc">Per reescalfar sobres del dia anterior recuperant la textura cruixent. Les patates, la pizza, les croquetes o les aletes d'ahir tornaran a estar com acabades de fer. Uns 5–8 minuts solen ser suficients.</div>
+      </div>
+    </div>
+
+    <div class="help-mode">
+      <div class="help-mode-icon hm-keepwarm">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6"/><circle cx="12" cy="16" r="1" fill="currentColor"/></svg>
+      </div>
+      <div class="help-mode-body">
+        <div class="help-mode-name">Keep Warm — Manté la calor</div>
+        <div class="help-mode-desc">Manté el menjar calent sense continuar cuinant. Útil quan el plat ja és llest però no és l'hora de servir, o quan fas dues fornades i vols que la primera no es refredi.</div>
+      </div>
+    </div>
+
+    <p class="help-sub">Consells generals</p>
+
+    <div class="help-tip"><strong>Esprai d'oli:</strong> és la millor inversió que pots fer. Amb dos tocs tens tota la superfície coberta de manera uniforme, sense excés d'oli.</div>
+    <div class="help-tip"><strong>No sobrecarreguis la cistella:</strong> si els aliments es toquen, es couran al vapor en lloc de daurar-se. Fes dues fornades si cal.</div>
+    <div class="help-tip"><strong>Gira a la meitat:</strong> la majoria de receptes ho indiquen, però fins i tot quan no ho posa, girar millora el resultat.</div>
+    <div class="help-tip"><strong>Congelat:</strong> la majoria d'aliments petits (gambes, croquetes, patates) van directament del congelador al Ninja afegint 4–6 min. Les peces grosses (pits de pollastre, entrecots) millor descongelar primer.</div>
+    <div class="help-tip"><strong>Recrisp vs Air Fry per reescalfar:</strong> usa Recrisp per a restes amb textura (patates, empanats). Usa Keep Warm per a guisats o plats amb salsa que no necessiten cruixent.</div>
+
+  </div>
+</div>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal" id="modal">
+    <div class="modal-stripe" id="modal-stripe"></div>
+    <div class="modal-inner">
+      <button class="modal-close" id="modal-close" aria-label="Tancar">×</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const R = [
+  /* ══ DINARS ══ */
+  {nom:"Pollastre rostit amb llimona i herbes",cat:"dinar",dif:"Fàcil",mins:30,mode:"Roast",
+   desc:"Cuixes de pollastre sucoses amb escorça daurada, all, romaní i suc de llimona.",
+   congelat:"Millor descongelar prèviament. Afegeix 10 min si les cuixes són gruixudes.",
+   ing:[["Cuixes de pollastre","4 unitats"],["Llimona","1 unitat"],["All","4 grans"],["Romaní fresc","2 branques"],["Oli d'oliva","3 cs"],["Sal i pebre","al gust"]],
+   pas:["Fer talls a les cuixes i salpebrar generosament.","Barrejar oli, suc de llimona, all picat i fulles de romaní. Marinar 20 min.","Seleccionar Roast i cuinar 25–28 min girant a la meitat.","Reposar 3 min i servir amb els sucs de cocció."]},
+
+  {nom:"Lluç amb samfaina",cat:"dinar",dif:"Mitjà",mins:35,mode:"Roast",
+   desc:"Lloms de lluç sobre un llit de societat de pebrot, tomàquet i carbassó.",
+   congelat:"El lluç congelat funciona bé. Descongela primer i asseca molt bé abans de cuinar.",
+   ing:[["Lloms de lluç","4 unitats"],["Pebrot vermell","1 unitat"],["Pebrot verd","1 unitat"],["Tomàquet madur","2 unitats"],["Carbassó","1 unitat"],["Oli d'oliva","3 cs"],["All","2 grans"],["Sal i pebre","al gust"]],
+   pas:["Tallar totes les verdures a daus i barrejar amb oli, all i sal.","Seleccionar Roast i cuinar les verdures 15 min remenant a la meitat.","Col·locar els lloms de lluç sobre la samfaina i salpebrar.","Cuinar 12–15 min més fins que el peix sigui opac al centre."]},
+
+  {nom:"Costelles de xai amb all i romaní",cat:"dinar",dif:"Fàcil",mins:25,mode:"Air Fry",
+   desc:"Costelles de xai tendres amb escorça cruixent i aroma mediterrània.",
+   congelat:"Descongelar completament abans. El xai necessita cocció uniforme.",
+   ing:[["Costelles de xai","8 unitats"],["All","3 grans"],["Romaní fresc","1 branca"],["Oli d'oliva","2 cs"],["Suc de llimona","1 cs"],["Sal i pebre","al gust"]],
+   pas:["Barrejar oli, all ratllat, romaní picat i suc de llimona.","Untar les costelles i marinar 30 min mínim (millor 2 h).","Seleccionar Air Fry i cuinar 10–12 min girant a la meitat.","Servir immediatament amb una amanida verda."]},
+
+  {nom:"Rap amb patates i pebre vermell",cat:"dinar",dif:"Mitjà",mins:35,mode:"Roast",
+   desc:"Medallons de rap sobre patates rostides amb pebre vermell de la Vera.",
+   congelat:"Descongela el rap i asseca bé. Les patates van millor fresques.",
+   ing:[["Rap (medallons)","600 g"],["Patates","400 g"],["Pebre vermell de la Vera","1 ct"],["All","3 grans"],["Oli d'oliva","4 cs"],["Julivert","al gust"],["Sal","al gust"]],
+   pas:["Tallar les patates a rodanxes fines i barrejar amb oli, all i pebre vermell.","Seleccionar Roast i cuinar les patates 18 min.","Col·locar el rap sobre les patates, salpebrar i ruixar amb oli.","Cuinar 12–15 min més. Acabar amb julivert picat."]},
+
+  {nom:"Pit de pollastre farcit de formatge i espinacs",cat:"dinar",dif:"Mitjà",mins:30,mode:"Air Fry",
+   desc:"Rollito de pollastre farcit d'espinacs saltat, all i formatge de cabra.",
+   congelat:"No recomanat. Necessita cocció precisa per garantir que el centre és cuit.",
+   ing:[["Pits de pollastre","2 unitats grossos"],["Espinacs frescos","100 g"],["Formatge de cabra","80 g"],["All","2 grans"],["Oli d'oliva","2 cs"],["Sal i pebre","al gust"]],
+   pas:["Saltear els espinacs amb all picat 2 min en una paella. Refredar.","Obrir els pits com un llibre, salpebrar i farcir amb espinacs i formatge.","Lligar amb fil de cuina o tancar amb escuradents.","Seleccionar Air Fry i cuinar 22–25 min girant una vegada."]},
+
+  {nom:"Sardinetes amb tomàquet i orenga",cat:"dinar",dif:"Fàcil",mins:20,mode:"Air Fry",
+   desc:"Sardines fresques obertes amb tomàquet, orenga i un raig d'oli verge.",
+   congelat:"Millor fresques. Si congelades, descongela i asseca molt bé per evitar vapor.",
+   ing:[["Sardines obertes i netes","8 unitats"],["Tomàquet madur","2 unitats"],["Orenga seca","1 ct"],["All","2 grans"],["Oli d'oliva verge","3 cs"],["Sal i pebre","al gust"]],
+   pas:["Posar les sardines obertes a la cistella, pell cap avall.","Cobrir amb rodanxes fines de tomàquet, all laminat i orenga.","Ruixar amb oli i salpebrar.","Seleccionar Air Fry i cuinar 12–15 min fins que el tomàquet estigui tou."]},
+
+  {nom:"Conill amb bolets i farigola",cat:"dinar",dif:"Mitjà",mins:40,mode:"Roast",
+   desc:"Trossos de conill daurats sobre un llit de bolets de temporada i farigola.",
+   congelat:"Descongelar prèviament. Afegeix 8 min si els trossos són grans.",
+   ing:[["Conill trossejat","1 kg"],["Bolets variats","300 g"],["Farigola fresca","3 branques"],["All","4 grans"],["Vi blanc sec","4 cs"],["Oli d'oliva","3 cs"],["Sal i pebre","al gust"]],
+   pas:["Salpebrar el conill i dorar-lo a Air Fry 10 min per segellar la carn.","Afegir bolets, all sencer, farigola i vi blanc.","Canviar a Roast i cuinar 25–28 min remenant a la meitat.","Comprovar que la carn es desprèn de l'os fàcilment."]},
+
+  {nom:"Musclos amb all i vi blanc",cat:"dinar",dif:"Fàcil",mins:15,mode:"Air Fry",
+   desc:"Musclos oberts al vapor de vi blanc i all amb un toc de julivert.",
+   congelat:"Millor frescos. Els musclos congelats cuits es poden fer amb Recrisp per escalfar.",
+   ing:[["Musclos nets","1 kg"],["All","4 grans"],["Vi blanc sec","6 cs"],["Julivert fresc","1 grapat"],["Oli d'oliva","2 cs"],["Pebre negre","al gust"]],
+   pas:["Col·locar els musclos a la cistella amb all laminat i vi blanc.","Seleccionar Air Fry i cuinar 8–10 min fins que tots s'hagin obert.","Descartar els que no s'hagin obert.","Acabar amb julivert picat, oli i pebre negre."]},
+
+  {nom:"Llom de porc amb figues i mel",cat:"dinar",dif:"Mitjà",mins:30,mode:"Roast",
+   desc:"Llom de porc amb figues fresques caramel·litzades i un toc de mel i vinagre balsàmic.",
+   congelat:"Descongelar completament. El llom necessita temperatura uniforme al centre.",
+   ing:[["Llom de porc","600 g"],["Figues fresques","4 unitats"],["Mel","2 cs"],["Vinagre balsàmic","1 cs"],["Romaní","1 branca"],["Oli d'oliva","2 cs"],["Sal i pebre","al gust"]],
+   pas:["Salpebrar el llom i sellar a Air Fry 5 min per dorar l'exterior.","Canviar a Roast. Afegir figues al voltant, regar amb mel i balsamico.","Afegir el romaní i cuinar 20–22 min.","Reposar 5 min, tallar a rodanxes i servir amb les figues."]},
+
+  {nom:"Daurada al forn amb verdures",cat:"dinar",dif:"Fàcil",mins:30,mode:"Roast",
+   desc:"Daurada sencera sobre un llit de patates primes, ceba i tomàquet.",
+   congelat:"No recomanat per a peix sencer. Millor fresc per garantir cocció uniforme.",
+   ing:[["Daurada sencera neta","2 unitats (400g c/u)"],["Patates","300 g"],["Ceba","1 unitat"],["Tomàquet","2 unitats"],["All","3 grans"],["Oli d'oliva","4 cs"],["Julivert i llimona","al gust"]],
+   pas:["Tallar patates i ceba a rodanxes fines. Barrejar amb oli, all i sal.","Seleccionar Roast i cuinar les verdures 12 min.","Col·locar les daurades sobre les verdures, salpebrar i ruixar amb oli.","Cuinar 18–20 min fins que la pell estigui daurada i la carn es desprengui."]},
+
+  {nom:"Mandonguilles amb salsa de tomàquet casolana",cat:"dinar",dif:"Mitjà",mins:30,mode:"Air Fry",
+   desc:"Mandonguilles de vedella i porc daurades, servides amb salsa de tomàquet fresc.",
+   congelat:"Les mandonguilles crues congelades funcionen bé. Afegeix 5 min al temps.",
+   ing:[["Carn picada mixta","500 g"],["Pa ratllat","3 cs"],["Ou","1 unitat"],["All","2 grans"],["Julivert","al gust"],["Tomàquet triturat","400 g"],["Ceba","1 unitat"],["Sal i pebre","al gust"]],
+   pas:["Barrejar carn, pa ratllat, ou, all i julivert. Formar mandonguilles de 3 cm.","Seleccionar Air Fry i cuinar 12 min girant a la meitat.","En paral·lel, sofregir la ceba amb el tomàquet en una paella 15 min.","Servir les mandonguilles sobre la salsa ben calenta."]},
+
+  {nom:"Pollastre amb olives i tomàquets cherry",cat:"dinar",dif:"Fàcil",mins:30,mode:"Roast",
+   desc:"Cuixes de pollastre amb olives negres, tomàquets cherry i herbes de Provença.",
+   congelat:"Descongelar prèviament. Assecar bé la pell per aconseguir cruixent.",
+   ing:[["Cuixes de pollastre","4 unitats"],["Tomàquets cherry","200 g"],["Olives negres","100 g"],["Herbes de Provença","1 ct"],["All","3 grans"],["Oli d'oliva","3 cs"],["Sal i pebre","al gust"]],
+   pas:["Salpebrar el pollastre i barrejar els cherry, olives i all amb oli i herbes.","Col·locar el pollastre amb la pell cap amunt i les verdures al voltant.","Seleccionar Roast i cuinar 25–28 min.","Comprovar que els sucs surtin clars en punxar la part més gruixuda."]},
+
+  {nom:"Bacallà confitat amb cigrons",cat:"dinar",dif:"Mitjà",mins:30,mode:"Roast",
+   desc:"Lloms de bacallà dessalat sobre cigrons amb espinacs i pebre vermell dolç.",
+   congelat:"El bacallà congelat dessalat va molt bé. Asseca bé abans de cuinar.",
+   ing:[["Lloms de bacallà dessalat","4 unitats"],["Cigrons cuits","400 g"],["Espinacs","100 g"],["All","3 grans"],["Pebre vermell dolç","1 ct"],["Oli d'oliva","4 cs"],["Sal","al gust"]],
+   pas:["Barrejar cigrons, espinacs, all laminat, pebre vermell i oli.","Seleccionar Roast i cuinar els cigrons 10 min remenant.","Col·locar el bacallà sobre els cigrons amb la pell cap avall.","Cuinar 12–15 min fins que el bacallà estigui cuit i els cigrons daurats."]},
+
+  {nom:"Entrecot de vedella amb bolets",cat:"dinar",dif:"Fàcil",mins:20,mode:"Air Fry",
+   desc:"Filet de vedella cruixent per fora i rossat per dins, amb guarnició de bolets saltejats.",
+   congelat:"Descongelar completament al frigorífic. Mai cuinar un entrecot congelat.",
+   ing:[["Entrecot de vedella","2 unitats (200g c/u)"],["Bolets","200 g"],["All","2 grans"],["Romaní","1 branca"],["Mantega","20 g"],["Oli d'oliva","2 cs"],["Sal i pebre","al gust"]],
+   pas:["Treure la carn de la nevera 30 min abans. Salpebrar generosament.","Seleccionar Air Fry i cuinar 8–10 min girant a la meitat (al punt rosat).","En els últims 5 min afegir bolets, all i romaní al voltant.","Reposar 3 min amb un tros de mantega per sobre."]},
+
+  {nom:"Paella de verdures al Ninja",cat:"dinar",dif:"Mitjà",mins:35,mode:"Roast",
+   desc:"Arròs amb verdures de temporada, safrà i brou de verdures, acabat al Ninja.",
+   congelat:"Els ingredients frescos donen millor resultat. Les verdures congelades s'aigualeixen.",
+   ing:[["Arròs rodó","300 g"],["Pebrot vermell i verd","1 de cada"],["Tomàquet","2 unitats"],["Ceba","1 unitat"],["All","3 grans"],["Brou de verdures","700 ml"],["Safrà","1 pessic"],["Oli d'oliva","3 cs"]],
+   pas:["Sofregir ceba, all i pebrots tallats en una paella amb oli 8 min.","Afegir l'arròs, el tomàquet i el safrà. Remenar 2 min.","Traspassar a una safata apta per al Ninja. Afegir el brou calent.","Seleccionar Roast i cuinar 18–20 min fins que l'arròs absorbeixi el brou."]},
+
+  /* ══ SOPARS ══ */
+  {nom:"Salmó amb espàrrecs i llimona",cat:"sopar",dif:"Fàcil",mins:18,mode:"Air Fry",
+   desc:"Filet de salmó amb espàrrecs verds, ratlladura de llimona i eneldo.",
+   congelat:"El salmó congelat funciona perfectament. Descongela i asseca molt bé.",
+   ing:[["Filets de salmó","2 unitats"],["Espàrrecs verds","1 manat"],["Llimona","1 unitat"],["Anet fresc","1 cs"],["Oli d'oliva","2 cs"],["Sal i pebre","al gust"]],
+   pas:["Treure la part llenyosa dels espàrrecs i col·locar-los a la cistella.","Posar el salmó al mig, salpebrar i ruixar amb oli.","Seleccionar Air Fry i cuinar 12–14 min.","Acabar amb ratlladura de llimona, suc i anet fresc."]},
+
+  {nom:"Truita de patates al Ninja",cat:"sopar",dif:"Mitjà",mins:30,mode:"Air Fry",
+   desc:"La clàssica truita de patates, amb la textura perfecta i molt menys oli.",
+   congelat:"No recomanat. Necessita patates fresques per la textura adequada.",
+   ing:[["Patates","500 g"],["Ous","5 unitats"],["Ceba","1 unitat"],["Oli d'oliva","3 cs"],["Sal","al gust"]],
+   pas:["Tallar patates i ceba fines. Barrejar amb oli i sal.","Seleccionar Air Fry i cuinar 18 min remenant tres vegades fins que estiguin toves.","Batre els ous amb sal, afegir les patates i barrejar bé.","Posar la barreja en un motlle rodó untat i cuinar a Air Fry 10–12 min."]},
+
+  {nom:"Gambes a la planxa amb all i bitxo",cat:"sopar",dif:"Fàcil",mins:12,mode:"Air Fry",
+   desc:"Gambes grans a la planxa amb all, bitxo i un raig de llimona.",
+   congelat:"Les gambes congelades van molt bé. Descongela, asseca i marina com de fresc.",
+   ing:[["Gambes grans","500 g"],["All","4 grans"],["Bitxo sec","1 unitat"],["Oli d'oliva","3 cs"],["Llimona","1 unitat"],["Julivert fresc","al gust"],["Sal","al gust"]],
+   pas:["Barrejar les gambes amb oli, all laminat, bitxo esmicolat i sal.","Marinar 15 min a la nevera.","Seleccionar Air Fry i cuinar 6–8 min fins que estiguin rosades.","Acabar amb suc de llimona i julivert picat."]},
+
+  {nom:"Verdures farcides de quinoa i formatge",cat:"sopar",dif:"Mitjà",mins:30,mode:"Roast",
+   desc:"Pebrots i tomàquets farcits de quinoa, herbes i formatge feta.",
+   congelat:"Millor amb verdures fresques. La quinoa sempre fresca o cuita prèviament.",
+   ing:[["Pebrots grossos","2 unitats"],["Tomàquets grossos","2 unitats"],["Quinoa cuita","200 g"],["Formatge feta","100 g"],["Herbes fresques","al gust"],["All","1 gra"],["Oli d'oliva","2 cs"],["Sal i pebre","al gust"]],
+   pas:["Buidar els pebrots i tomàquets, reservant la polpa dels tomàquets.","Barrejar la quinoa amb feta esmicolat, herbes, all, polpa de tomàquet i oli.","Farcir les verdures generosament i col·locar a la cistella.","Seleccionar Roast i cuinar 22–25 min fins que les verdures estiguin toves."]},
+
+  {nom:"Calamars farcits de marisc",cat:"sopar",dif:"Difícil",mins:35,mode:"Roast",
+   desc:"Cossos de calamar farcits de gamba, ceba i tomàquet, braisats en la seva salsa.",
+   congelat:"Els calamars congelats nets van perfectament. Descongela i asseca bé.",
+   ing:[["Cossos de calamar grans","6 unitats"],["Gambes pelades","200 g"],["Ceba","1 unitat"],["Tomàquet triturat","200 g"],["All","2 grans"],["Vi blanc","4 cs"],["Oli d'oliva","3 cs"],["Sal i pebre","al gust"]],
+   pas:["Picar les gambes grosserament i saltear amb ceba i all 5 min. Refredar.","Farcir els calamars i tancar amb un escuradents.","Barrejar tomàquet, vi blanc i oli a la safata.","Seleccionar Roast i cuinar 25–28 min fins que els calamars siguin tendres."]},
+
+  {nom:"Albergínies farcides a la catalana",cat:"sopar",dif:"Mitjà",mins:35,mode:"Roast",
+   desc:"Albergínies farcides de carn picada, tomàquet i cobertes de formatge ratllat.",
+   congelat:"No recomanat. L'albergínia fresca dona la textura adequada.",
+   ing:[["Albergínies","2 unitats grosses"],["Carn picada de vedella","250 g"],["Tomàquet triturat","200 g"],["Ceba","1 unitat"],["All","2 grans"],["Formatge ratllat","60 g"],["Oli d'oliva","2 cs"],["Sal i pebre","al gust"]],
+   pas:["Partir les albergínies per la meitat, quadricular la polpa i ruixar amb oli.","Seleccionar Roast i cuinar 15 min fins que estiguin toves. Buidar reservant la polpa.","Sofregir ceba, all i carn. Afegir tomàquet i polpa d'albergínia. Cuinar 10 min.","Farcir les albergínies, cobrir de formatge i cuinar 10 min més fins que gratini."]},
+
+  {nom:"Espinacs amb cigrons i ou poché",cat:"sopar",dif:"Mitjà",mins:20,mode:"Air Fry",
+   desc:"Cigrons cruixents amb espinacs saltejats, espècies i ou poché a sobre.",
+   congelat:"Cigrons en pot van perfectament. Espinacs congelats també funcionen.",
+   ing:[["Cigrons cuits","400 g"],["Espinacs frescos","200 g"],["Ous","2 unitats"],["All","3 grans"],["Comí","½ ct"],["Pebre vermell","1 ct"],["Oli d'oliva","3 cs"],["Sal","al gust"]],
+   pas:["Assecar els cigrons i barrejar amb oli, comí, pebre vermell i sal.","Seleccionar Air Fry i cuinar els cigrons 15 min remenant a la meitat fins cruixents.","Afegir els espinacs i all els últims 3 min.","Fer l'ou poché en una cassola a part i col·locar sobre el plat."]},
+
+  {nom:"Filets de merluça amb salsa verda",cat:"sopar",dif:"Fàcil",mins:20,mode:"Air Fry",
+   desc:"Lloms de merluça amb salsa verda de julivert, all i fumet.",
+   congelat:"Funciona molt bé amb merluça congelada. Descongela i asseca amb paper.",
+   ing:[["Lloms de merluça","4 unitats"],["Julivert fresc","1 grapat gran"],["All","4 grans"],["Farina","1 cs"],["Fumet de peix","150 ml"],["Oli d'oliva","4 cs"],["Sal","al gust"]],
+   pas:["Salpebrar els lloms i ruixar amb un fil d'oli.","Seleccionar Air Fry i cuinar 12–14 min fins que el peix sigui opac.","En paral·lel, sofregir all picat amb oli, afegir farina i el fumet. Remenar.","Afegir julivert picat a la salsa i servir sobre el peix."]},
+
+  {nom:"Broquetes de pollastre i verdures",cat:"sopar",dif:"Fàcil",mins:22,mode:"Air Fry",
+   desc:"Broquetes de pollastre marinat amb pebrot, ceba i carbassó.",
+   congelat:"El pollastre es pot usar congelat i descongelat. Afegeix 5 min al temps.",
+   ing:[["Pit de pollastre","400 g"],["Pebrot vermell","1 unitat"],["Carbassó","1 unitat"],["Ceba","1 unitat"],["Oli d'oliva","3 cs"],["Pebre vermell fumat","1 ct"],["Llimona","½ unitat"],["Sal","al gust"]],
+   pas:["Tallar el pollastre i les verdures en daus de 3 cm.","Marinar amb oli, pebre vermell fumat, suc de llimona i sal 20 min.","Muntar les broquetes alternant pollastre i verdures.","Seleccionar Air Fry i cuinar 15–18 min girant dues vegades."]},
+
+  {nom:"Crema de carbassa al Ninja",cat:"sopar",dif:"Fàcil",mins:30,mode:"Roast",
+   desc:"Carbassa rostida al Ninja i triturada amb brou, gingebre i llet de coco.",
+   congelat:"La carbassa congelada a daus funciona perfectament per a aquesta recepta.",
+   ing:[["Carbassa","800 g"],["Ceba","1 unitat"],["Gingebre fresc","1 cm"],["Brou de verdures","500 ml"],["Llet de coco","100 ml"],["Oli d'oliva","2 cs"],["Sal i pebre","al gust"]],
+   pas:["Tallar la carbassa i la ceba a daus i barrejar amb oli, sal i pebre.","Seleccionar Roast i cuinar 25 min fins que estiguin toves i daurades.","Triturar amb el brou calent, el gingebre i la llet de coco.","Rectificar de sal i servir amb un fil d'oli verge."]},
+
+  {nom:"Anxoves amb tomàquets cherry rostits",cat:"sopar",dif:"Fàcil",mins:15,mode:"Roast",
+   desc:"Tomàquets cherry caramel·litzats amb anxoves, orenga i pa torrat.",
+   congelat:"Millor amb tomàquets frescos. Les anxoves sempre en conserva.",
+   ing:[["Tomàquets cherry","400 g"],["Anxoves en oli","10 filets"],["All","2 grans"],["Orenga seca","1 ct"],["Oli d'oliva","3 cs"],["Pa de pagès","4 llesques"],["Sal i pebre","al gust"]],
+   pas:["Tallar els cherry per la meitat i barrejar amb oli, all laminat i orenga.","Seleccionar Roast i cuinar 12 min fins que estiguin caramel·litzats.","Tostar el pa a Air Fry 3–4 min fins que sigui daurat i cruixent.","Col·locar els tomàquets sobre el pa i afegir les anxoves per sobre."]},
+
+  {nom:"Peix espasa a la planxa amb pisto",cat:"sopar",dif:"Fàcil",mins:25,mode:"Air Fry",
+   desc:"Tall de peix espasa sobre un pisto de verdures de temporada.",
+   congelat:"El peix espasa congelat funciona bé. Descongela i asseca amb paper.",
+   ing:[["Peix espasa (talls)","2 unitats"],["Carbassó","1 unitat"],["Pebrot vermell","1 unitat"],["Tomàquet","2 unitats"],["Ceba","1 unitat"],["All","2 grans"],["Oli d'oliva","3 cs"],["Sal i pebre","al gust"]],
+   pas:["Tallar totes les verdures a daus petits i barrejar amb oli, all i sal.","Seleccionar Roast i cuinar el pisto 18 min remenant a la meitat.","Salpebrar el peix espasa i ruixar amb oli.","Seleccionar Air Fry i cuinar el peix 8–10 min girant una vegada."]},
+
+  {nom:"Ous al plat amb tomàquet i pernil",cat:"sopar",dif:"Fàcil",mins:15,mode:"Air Fry",
+   desc:"Ous cuinats suaument sobre tomàquet fregit i pernil ibèric cruixent.",
+   congelat:"No aplica. Tots els ingredients van frescos.",
+   ing:[["Ous","4 unitats"],["Tomàquet madur","2 unitats"],["Pernil ibèric","4 llesques"],["All","1 gra"],["Oli d'oliva","2 cs"],["Sal i pebre","al gust"]],
+   pas:["Ratllar el tomàquet i saltear amb l'all i oli en una paella 5 min.","Posar la base de tomàquet en una safata apta pel Ninja.","Trencar els ous per sobre i afegir les llesques de pernil.","Seleccionar Air Fry i cuinar 7–9 min fins que la clara sigui blanca però el rovell mou."]},
+
+  {nom:"Bolets farcits de pernil i formatge",cat:"sopar",dif:"Fàcil",mins:20,mode:"Roast",
+   desc:"Portobello farcits de pernil dolç, formatge de cabra i herbes fresques.",
+   congelat:"Millor amb bolets frescos. El formatge sempre fresc.",
+   ing:[["Xampinyons portobello","4 unitats grossos"],["Pernil dolç","60 g"],["Formatge de cabra","80 g"],["All","1 gra"],["Julivert fresc","al gust"],["Oli d'oliva","2 cs"],["Sal i pebre","al gust"]],
+   pas:["Treure el peu dels bolets, picar-lo i barrejar amb pernil tallat, formatge i all.","Salpebrar la barreja i afegir julivert picat i un raig d'oli.","Farcir els bolets i col·locar a la cistella.","Seleccionar Roast i cuinar 16–18 min fins que el formatge estigui fos i daurat."]},
+
+  {nom:"Carbassó farcit de tonyina i tomàquet",cat:"sopar",dif:"Fàcil",mins:25,mode:"Roast",
+   desc:"Carbassons buits farcits de tonyina, tomàquet i olives, gratinats amb formatge.",
+   congelat:"Millor amb carbassons frescos. La tonyina sempre en conserva.",
+   ing:[["Carbassons","2 unitats grossos"],["Tonyina en oli","2 llaunes"],["Tomàquet madur","1 unitat"],["Olives negres","50 g"],["Formatge ratllat","40 g"],["Oli d'oliva","2 cs"],["Sal i pebre","al gust"]],
+   pas:["Partir els carbassons per la meitat i buidar la polpa.","Barrejar tonyina escorreguda, tomàquet a daus, olives i polpa de carbassó.","Farcir els carbassons, cobrir amb formatge ratllat i ruixar amb oli.","Seleccionar Roast i cuinar 20–22 min fins que el formatge gratini."]},
+
+  {nom:"Farcellets de paper d'arròs amb verdures",cat:"sopar",dif:"Fàcil",mins:20,mode:"Air Fry",
+   desc:"Làmines de paper d'arròs mullades en ou, farcides de pastanaga, carbassó i col, daurades al Ninja.",
+   congelat:"Les verdures congelades s'aigualeixen massa. Millor sempre fresques.",
+   ing:[["Fulles de paper d'arròs","8 unitats"],["Ous","2 unitats"],["Pastanaga","1 unitat"],["Carbassó","1 unitat"],["Col xinesa","100 g"],["All","1 gra"],["Salsa de soja","1 cs"],["Oli en esprai","necessari"]],
+   pas:["Tallar les verdures en juliana fina. Saltear 3 min amb all i salsa de soja. Refredar completament.","Batre els ous en un bol ample. Submergir una fulla de paper d'arròs en l'ou 10 segons fins que s'estovi.","Col·locar una cullerada de verdures al centre, plegar els laterals i enrotllar fort com un cigarro.","Ruixar amb esprai d'oli. Seleccionar Air Fry i cuinar 12–14 min girant a la meitat fins que estiguin daurats i cruixents."]},
+
+  {nom:"Farcellets de paper d'arròs amb pollastre i alvocat",cat:"sopar",dif:"Fàcil",mins:22,mode:"Air Fry",
+   desc:"Farcellets daurats farcits de pollastre desfilat, alvocat i pebrot, amb salsa de iogurt.",
+   congelat:"El pollastre es pot usar cuit i descongelat. L'alvocat sempre fresc.",
+   ing:[["Fulles de paper d'arròs","8 unitats"],["Ous","2 unitats"],["Pollastre cuit desfilat","200 g"],["Alvocat","1 unitat"],["Pebrot vermell","½ unitat"],["Ceba tendra","2 unitats"],["Iogurt grec","4 cs"],["Llimona","½ unitat"],["Sal i pebre","al gust"]],
+   pas:["Tallar l'alvocat, pebrot i ceba tendra en tires fines. Barrejar amb el pollastre, sal i pebre.","Batre els ous en un bol ample. Mullar cada fulla de paper d'arròs en l'ou 10 segons.","Farcir, plegar els laterals i enrotllar fort. No sobrecarregar o s'obriran.","Ruixar amb esprai d'oli. Seleccionar Air Fry i cuinar 12–15 min girant a la meitat. Servir amb iogurt amb suc de llimona."]},
+
+  {nom:"Farcellets de paper d'arròs amb tonyina i mango",cat:"sopar",dif:"Fàcil",mins:20,mode:"Air Fry",
+   desc:"Farcellets cruixents farcits de tonyina, mango dolç i ceba tendra, amb salsa de soja i sèsam.",
+   congelat:"La tonyina en conserva i el mango sempre frescos. No congelis el farcit.",
+   ing:[["Fulles de paper d'arròs","8 unitats"],["Ous","2 unitats"],["Tonyina en oli","2 llaunes"],["Mango madur","½ unitat"],["Ceba tendra","2 unitats"],["Coriandre fresc","al gust"],["Salsa de soja","1 cs"],["Llavors de sèsam","1 ct"],["Oli en esprai","necessari"]],
+   pas:["Escórrer la tonyina. Tallar el mango en daus petits i la ceba tendra en rodanxes fines.","Barrejar tonyina, mango, ceba, coriandre i salsa de soja. Deixar reposar 5 min.","Mullar cada fulla de paper d'arròs en ou batut 10 segons. Farcir i enrotllar fort.","Ruixar amb esprai d'oli i espolsar sèsam per sobre. Seleccionar Air Fry i cuinar 12–14 min girant a la meitat."]}
+];
+
+const CAT = {dinar:"Dinar",sopar:"Sopar"};
+const DIF_ORDER = {Fàcil:1,Mitjà:2,Difícil:3};
+let filter="tots", term="", sortBy="nom";
+
+function getFiltered(){
+  return R
+    .filter(r=>(filter==="tots"||r.cat===filter)&&(r.nom.toLowerCase().includes(term)||r.desc.toLowerCase().includes(term)))
+    .sort((a,b)=>{
+      if(sortBy==="temps") return a.mins-b.mins;
+      if(sortBy==="dif") return DIF_ORDER[a.dif]-DIF_ORDER[b.dif];
+      return a.nom.localeCompare(b.nom,"ca");
+    });
+}
+
+function arcSVG(mins){
+  const rv=18,cx=22,cy=22,circ=2*Math.PI*rv;
+  const dash=circ*Math.min(mins/60,1);
+  return `<svg class="card-arc" viewBox="0 0 44 44" aria-hidden="true"><circle class="arc-bg" cx="${cx}" cy="${cy}" r="${rv}" stroke-dasharray="${circ}" stroke-dashoffset="0"/><circle class="arc-fg" cx="${cx}" cy="${cy}" r="${rv}" stroke-dasharray="${circ}" stroke-dashoffset="${circ-dash}"/><text class="arc-label" x="${cx}" y="${cy+1}">${mins}'</text></svg>`;
+}
+
+function ico(t){
+  if(t==="clock") return`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+  if(t==="mode") return`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
+  if(t==="star") return`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+  if(t==="snow") return`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;display:inline;vertical-align:-2px;flex-shrink:0"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 7l-5-5-5 5"/><path d="M17 17l-5 5-5-5"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M7 7l-5 5 5 5"/><path d="M17 7l5 5-5 5"/></svg>`;
+  return"";
+}
+
+function render(){
+  const list=getFiltered();
+  document.getElementById("count").textContent=`${list.length} plat${list.length!==1?"s":""}`;
+
+  if(!list.length){
+    document.getElementById("grid").innerHTML=`<div class="empty"><div class="empty-icon">🫒</div><p>Cap plat coincideix amb la cerca.</p></div>`;
+    return;
+  }
+
+  const showSections = filter==="tots" && sortBy==="nom" && !term;
+
+  if(showSections){
+    const dinars=R.filter(r=>r.cat==="dinar").sort((a,b)=>a.nom.localeCompare(b.nom,"ca"));
+    const sopars=R.filter(r=>r.cat==="sopar").sort((a,b)=>a.nom.localeCompare(b.nom,"ca"));
+    document.getElementById("grid").innerHTML=`
+      <div class="section-header"><div class="section-dot dot-dinar"></div><h2>Dinars</h2><div class="section-line"></div></div>
+      <div class="grid">${dinars.map(r=>cardHTML(r)).join("")}</div>
+      <div class="section-header" style="margin-top:1rem"><div class="section-dot dot-sopar"></div><h2>Sopars</h2><div class="section-line"></div></div>
+      <div class="grid">${sopars.map(r=>cardHTML(r)).join("")}</div>
+    `;
+  } else {
+    document.getElementById("grid").innerHTML=`<div class="grid">${list.map(r=>cardHTML(r)).join("")}</div>`;
+  }
+}
+
+function cardHTML(r){
+  const idx=R.indexOf(r);
+  return `<article class="card" role="listitem" tabindex="0" onclick="openModal(${idx})" onkeydown="if(event.key==='Enter')openModal(${idx})" aria-label="${r.nom}">
+    ${arcSVG(r.mins)}
+    <div class="card-body">
+      <div class="card-head">
+        <span class="cat-pill cat-${r.cat}">${CAT[r.cat]}</span>
+        <h2>${r.nom}</h2>
+      </div>
+      <p class="card-desc">${r.desc}</p>
+      <div class="card-foot">
+        <span class="meta-item">${ico("clock")} ${r.mins} min</span>
+        <span class="meta-item">${ico("mode")} ${r.mode}</span>
+        <span class="dif">${r.dif}</span>
+      </div>
+    </div>
+  </article>`;
+}
+
+function openModal(i){
+  const r=R[i];
+  document.getElementById("modal-stripe").className=`modal-stripe ms-${r.cat}`;
+  document.getElementById("modal-body").innerHTML=`
+    <div class="modal-cat"><span class="cat-pill cat-${r.cat}">${CAT[r.cat]}</span></div>
+    <h2 id="modal-title">${r.nom}</h2>
+    <p class="modal-desc">${r.desc}</p>
+    <div class="modal-badges">
+      <div class="badge">${ico("clock")} ${r.mins} minuts</div>
+      <div class="badge">${ico("mode")} ${r.mode}</div>
+      <div class="badge">${ico("star")} ${r.dif}</div>
+    </div>
+    <p class="sec-label">Ingredients</p>
+    <div>${r.ing.map(([n,q])=>`<div class="ing-row"><span>${n}</span><span class="ing-qty">${q}</span></div>`).join("")}</div>
+    <p class="sec-label">Preparació</p>
+    <div>${r.pas.map((p,j)=>`<div class="step"><div class="step-n">${j+1}</div><p>${p}</p></div>`).join("")}</div>
+    <div class="congelat-tip">${ico("snow")} <strong>Congelat:</strong> ${r.congelat}</div>
+  `;
+  document.getElementById("overlay").classList.add("open");
+  document.getElementById("modal-close").focus();
+}
+
+function closeModal(){document.getElementById("overlay").classList.remove("open")}
+
+document.getElementById("modal-close").addEventListener("click",closeModal);
+document.getElementById("overlay").addEventListener("click",e=>{if(e.target===document.getElementById("overlay"))closeModal()});
+document.getElementById("help-btn").addEventListener("click",()=>document.getElementById("help-panel").classList.add("open"));
+document.getElementById("help-panel").addEventListener("click",e=>{if(e.target===document.getElementById("help-panel"))document.getElementById("help-panel").classList.remove("open")});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){document.getElementById("overlay").classList.remove("open");document.getElementById("help-panel").classList.remove("open")}});
+
+
+document.querySelectorAll(".fbtn").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".fbtn").forEach(x=>x.classList.remove("on","on-dinar","on-sopar"));
+    const f=b.dataset.f;
+    b.classList.add(f==="dinar"?"on-dinar":f==="sopar"?"on-sopar":"on");
+    filter=f;
+    render();
+  });
+});
+
+document.getElementById("search").addEventListener("input",e=>{term=e.target.value.toLowerCase();render()});
+document.getElementById("sort").addEventListener("change",e=>{sortBy=e.target.value;render()});
+
+render();
+</script>
+</body>
+</html>
