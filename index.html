@@ -71,6 +71,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 /* GRID */
 main{max-width:1200px;margin:0 auto;padding:1rem 1.25rem 6rem}
 .grid{columns:3 300px;column-gap:1.25rem}
+@media(max-width:600px){.grid{columns:1}}
 
 /* CARD */
 .card{break-inside:avoid;background:var(--surface);border:1px solid var(--line2);border-radius:8px;margin-bottom:1.25rem;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s;overflow:hidden;position:relative}
